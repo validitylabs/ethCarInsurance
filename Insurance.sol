@@ -2,44 +2,38 @@
 contract Insurance {
     mapping(address => bool) isInsured;
     mapping(address => uint) numAccidents;
-    mapping(address => bool) incassoTriggered;
-    mapping(address => uint) lastPaymentTime;
+    mapping(address => uint) lastPayment;
+    mapping(address => bool) kickedOut;
     
+    uint paymentPeriod = 20 seconds;
     uint premiumPerAccident = 0.1 ether;
-    uint paymentPeriod = 10 seconds;
-    address owner;
-    
-    modifier onlyOwner () {
-        if (msg.sender != owner)
-            throw;
-        _;
-    }
-    
-    function AccidentInsurance() {
-        owner = msg.sender;
-    }
     
     function payIn() payable {
-        if (incassoTriggered[msg.sender])
+        if (msg.value < (numAccidents[msg.sender] + 1) * premiumPerAccident)
             throw;
-        if (numAccidents[msg.sender] + 1 > msg.value / premiumPerAccident)
+        if (kickedOut[msg.sender])
             throw;
-        isInsured[msg.sender] = true;
+        if (checkStatus()) {
+            lastPayment[msg.sender] = now;
+            isInsured[msg.sender] = true;
+        }
     }
     
-    function checkPaymentInTime() internal {
-        if (isInsured[msg.sender] && lastPaymentTime[msg.sender] < now - paymentPeriod) {
-            incassoTriggered[msg.sender] = true;
+    function checkStatus() internal returns (bool) {
+        if (isInsured[msg.sender] && lastPayment[msg.sender] < now - paymentPeriod) {
             isInsured[msg.sender] = false;
-            lastPaymentTime[msg.sender] = now;
+            kickedOut[msg.sender] = true;
+            return false;
         }
+        return true;
+    }
+    
+    function amIinsured() payable returns (bool) {
+        checkStatus();
+        return isInsured[msg.sender];
     }
     
     function accident() payable {
         numAccidents[msg.sender]++;
-    }
-    
-    function amIinsured() payable returns (bool) {
-        return isInsured[msg.sender];
     }
 }
