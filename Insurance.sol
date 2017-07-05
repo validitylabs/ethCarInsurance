@@ -1,12 +1,14 @@
+pragma solidity ^0.4.11;
+
 // all but the payIn function are just marked as `payable` so that testing in Remix is easy and we can leave a value for all calls.
 contract Insurance {
-    mapping(address => bool) isInsured;
-    mapping(address => uint) numAccidents;
-    mapping(address => uint) lastPayment;
-    mapping(address => bool) kickedOut;
+    mapping(address => bool) public isInsured;
+    mapping(address => uint) public numAccidents;
+    mapping(address => uint) public lastPayment;
+    mapping(address => bool) public kickedOut;
     
-    uint paymentPeriod = 20 seconds;
-    uint premiumPerAccident = 0.1 ether;
+    uint public paymentPeriod = 20 seconds;
+    uint public premiumPerAccident = 0.1 ether;
     
     function payIn() payable {
         if (msg.value < (numAccidents[msg.sender] + 1) * premiumPerAccident)
@@ -35,5 +37,9 @@ contract Insurance {
     
     function accident() payable {
         numAccidents[msg.sender]++;
+    }
+    
+    function getEtherOut() {
+        msg.sender.transfer(this.balance);
     }
 }
