@@ -10,7 +10,7 @@ contract Insurance {
 
     uint public premiumPerAccident = 0.1 ether;
     
-    function payIn() payable {
+    function payIn() public payable {
         require (msg.value >= (numAccidents[msg.sender] + 1) * premiumPerAccident);
         require (!kickedOut[msg.sender]);
         if (checkStatus()) {
@@ -28,16 +28,16 @@ contract Insurance {
         return true;
     }
     
-    function amIinsured() returns (bool) {
+    function amIinsured() public returns (bool) {
         checkStatus();
         return isInsured[msg.sender];
     }
     
-    function accident() {
+    function accident() public {
         numAccidents[msg.sender]++;
     }
     
-    function getEtherOut() {
+    function getEtherOut() public {
         msg.sender.transfer(this.balance);
     }
 }
