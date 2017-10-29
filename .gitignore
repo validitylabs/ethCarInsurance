@@ -1,0 +1,5 @@
+.idea
+.eslintcache
+.DS_Store
+node_modules
+/bin

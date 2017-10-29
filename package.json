@@ -1,0 +1,11 @@
+{
+  "name": "ethCarInsurance",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:validitylabs/ethCarInsurance.git",
+  "author": "Sebastian Buergel <s.buergel@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "truffle": "^3.4.11"
+  }
+}
