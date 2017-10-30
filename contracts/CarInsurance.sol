@@ -13,7 +13,7 @@ contract CarInsurance is Insurance {
 
     mapping(address => InsuranceTaker) public insuranceTakers;
 
-    uint256 public paymentPeriod = 40 seconds;
+    uint256 public paymentPeriod = 30 days;
 
     uint256 public premiumPerAccident = 0.1 ether;
 
@@ -28,7 +28,7 @@ contract CarInsurance is Insurance {
         // in order to underwrite the customer needs to pay the first premium upfront
         require(msg.value == getPremium(msg.sender));
 
-        customer.lastPayment == now;
+        customer.lastPayment = now;
         customer.policyValid = true;
     }
 
@@ -38,7 +38,7 @@ contract CarInsurance is Insurance {
 
         InsuranceTaker storage customer = insuranceTakers[insuranceTaker];
 
-        if(customer.policyValid && customer.lastPayment < now - paymentPeriod) {
+        if (customer.policyValid && customer.lastPayment + paymentPeriod < now) {
             customer.policyValid = false;
             customer.banned = true;
         }
@@ -49,7 +49,7 @@ contract CarInsurance is Insurance {
         InsuranceTaker storage customer = insuranceTakers[insuranceTaker];
         return customer.policyValid && 
             !customer.banned &&
-            customer.lastPayment + paymentPeriod < now;
+            customer.lastPayment + paymentPeriod >= now;
     }
 
     // calculates the premium for an insurance taker

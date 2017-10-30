@@ -16,7 +16,7 @@
     "coverage": "solidity-coverage",
     "clean": "rm -fr dist; rm -fr build; rm -fr bin",
     "reset": "rm -fr node_modules; npm run clean",
-    "testrpc": "testrpc --network-id 1337 --mnemonic 'waste system voyage dentist fine donate purpose truly cactus chest coyote globe'"
+    "testrpc": "testrpc --gasPrice 1000000000 --network-id 1337 --mnemonic 'waste system voyage dentist fine donate purpose truly cactus chest coyote globe'"
   },
   "devDependencies": {
     "ethereumjs-testrpc": "^4.1.3",
