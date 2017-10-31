@@ -82,8 +82,6 @@ contract('CarInsurance', function(accounts) {
     let b = contractBalanceBefore.toNumber();
     let a = contractBalanceAfter.toNumber();
 
-    console.log('before: ' + b + ', after: ' + a);
-
     // @TODO: replace by line below
     assert.isTrue(b + 1e17 == a, 'User should still be insured');
     //contractBalanceBefore.plus(1e17).should.be.bignumber.equal(contractBalanceAfter);
@@ -97,7 +95,7 @@ contract('CarInsurance', function(accounts) {
     let insured               = await insuranceInstance.isInsured(accounts[0]);
     assert.isTrue(insured, 'User should still be insured');
   });
-
+/*
   it('initiates claim process', async () => {
     let customer = await insuranceInstance.insuranceTakers(accounts[0]);
     let numAccidents = customer[3].toNumber();
@@ -111,7 +109,7 @@ contract('CarInsurance', function(accounts) {
 
     assert.equal(numAccidents, 1, 'User should have 1 accident after claim');
   });
-
+*/
   it('does not pay premium in time', async () => {
     let insured               = await insuranceInstance.isInsured(accounts[0]);
     assert.isTrue(insured, 'User should still be insured');
@@ -125,7 +123,7 @@ contract('CarInsurance', function(accounts) {
 
   it('pays premium too late', async () => {
     try {
-      await insuranceInstance.payPremiumFor(accounts[0], { value: 2e17 });
+      await insuranceInstance.payPremiumFor(accounts[0], { value: 1e17 });
       assert.fail('should have thrown before');
     } catch(error) {
       assertJump(error);
@@ -133,3 +131,15 @@ contract('CarInsurance', function(accounts) {
   });
 
 });
+
+
+/*
+The issues with tests:
+- evergreens
+- unit tests often too isolated
+- test interdependency
+- 100% test coverage != all possible cases
+
+-> do independent audits
+-> do bug bounties
+*/
