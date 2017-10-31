@@ -3,21 +3,12 @@
  */
 const CarInsurance = artifacts.require("./CarInsurance");
 
-// @TODO: uncomment this!!!!
+const BigNumber = web3.BigNumber;
 
-// const BigNumber = web3.BigNumber;
-
-// const should = require('chai')
-//   .use(require('chai-as-promised'))
-//   .use(require('chai-bignumber')(BigNumber))
-//   .should();
-
-// @TODO: add this to package.json
-
-// "chai": "^4.1.2",
-// "chai-as-promised": "^7.1.1",
-// "chai-bignumber": "^2.0.1",
-
+const should = require('chai')
+  .use(require('chai-as-promised'))
+  .use(require('chai-bignumber')(BigNumber))
+  .should();
 
 /**
  * Expect exception throw above call of assertJump()
@@ -82,9 +73,7 @@ contract('CarInsurance', function(accounts) {
     let b = contractBalanceBefore.toNumber();
     let a = contractBalanceAfter.toNumber();
 
-    // @TODO: replace by line below
-    assert.isTrue(b + 1e17 == a, 'User should still be insured');
-    //contractBalanceBefore.plus(1e17).should.be.bignumber.equal(contractBalanceAfter);
+    contractBalanceBefore.plus(1e17).should.be.bignumber.equal(contractBalanceAfter);
   });
 
   it('pays premium for', async () => {
@@ -131,15 +120,3 @@ contract('CarInsurance', function(accounts) {
   });
 
 });
-
-
-/*
-The issues with tests:
-- evergreens
-- unit tests often too isolated
-- test interdependency
-- 100% test coverage != all possible cases
-
--> do independent audits
--> do bug bounties
-*/
